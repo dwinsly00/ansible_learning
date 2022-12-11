@@ -1,0 +1,27 @@
+# install NGINX, PHP, MySQL.
+
+---
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: update repository
+    apt:
+      update_cache: yes
+
+  - name: install NGINX
+    apt:
+      name: nginx
+      state: latest
+
+  - name: install PHP and modules
+    apt:
+      name: 'php-fpm, php-mysql, php-curl, php-mbstring, php-imagick, php-xml, php-zip'
+      state: latest
+
+  - name: install MYSQL
+    apt:
+      name: mysql-server
+      state: latest
+
