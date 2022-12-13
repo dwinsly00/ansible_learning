@@ -6,22 +6,47 @@
   become: true
   tasks:
 
-  - name: update repository
+#This section is for DEBIAN/UBUNTU
+
+  - name: update repository for ubuntu
     apt:
       update_cache: yes
+    when: ansible_distribution in ["Ubuntu", "Debian"]
 
-  - name: install NGINX
+  - name: install NGINX, PHP, MySQL.
     apt:
-      name: nginx
+      name:
+        - nginx
+        - php-fpm
+        - mariadb-server
       state: latest
+    when: ansible_distribution in ["Ubuntu", "Debian"]
 
   - name: install PHP and modules
     apt:
-      name: 'php-fpm, php-mysql, php-curl, php-mbstring, php-imagick, php-xml, php-zip'
+      name: 'php-mysql, php-curl, php-mbstring, php-imagick, php-xml, php-zip'
       state: latest
+    when: ansible_distribution in ["Ubuntu", "Debian"]
 
-  - name: install MYSQL
-    apt:
-      name: mysql-server
+
+#This section is for CENTOS/RHEL
+
+  - name: update repository for CentOS
+    dnf:
+      update_cache: yes
+    when: ansible_distribution in ["RHEL", "CentOS", "CentOS/RHEL", "Fedora"]
+
+  - name: install NGINX, PHP, MySQL.
+    dnf:
+      name:
+        - nginx
+        - 'php-fpm, php-mysqlnd'
+        - mariadb-server
       state: latest
+    when: ansible_distribution in ["RHEL", "CentOS", "CentOS/RHEL", "Fedora"]
 
+  - name: install PHP modules
+    dnf:
+      name: ' php-curl, php-mbstring, php-xml, php-zip'
+      state: latest
+    when: ansible_distribution in ["RHEL", "CentOS", "CentOS/RHEL", "Fedora"]
